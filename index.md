@@ -1,3 +1,6 @@
+---
+layout: default
+---
 # Neural Architecture Search for Mobile Semantic Segmentation
 ### CS766 2024 Spring project
 ### Mingkai wang, Jidong Xu, Ethan Fang
