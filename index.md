@@ -21,7 +21,9 @@ As shown in Figure 1, the NAS model searched by our algorithm can achieve the b
     
 -   We proposed a novel CDS method to efficiently explore the proposed search space. This method is both simple and effective, allowing for quick convergence in problems where computing gradients is infeasible (e.g. architecture search).
 
-![Figure 1](figure/pareto.png)
+<p align="center">
+<img width="1000" src="./figure/pareto.png" />
+</p>
 
 <div style="text-align: center;">      Figure 1: The latency, mIoU performance versus model size on the ADE20K val set. Our methods achieve a better accuracy-latency trade-off. The latency is measured on a single Qualcomm Snapdragon 865 with input size 512×512, and only an ARM CPU core is used for speed testing. * indicates the input size is 448×448.</div>
 
@@ -68,7 +70,9 @@ Finally, TopFormer splits scale-aware global semantics by channels of tokens fro
 
 The overview of Efficient-Topformer is illustrated in Figure 2, which aims to find an efficient model for semantic segmentation. We design a new search space that takes advantage of both CNN and ViT (Sec 31.). Additionally, to fully utilize the supernets, we proposed Coordinate Descent Search to search the optimal model (Sec 3.2).
 
-![Figure 2](figure/pipeline.png)
+<p align="center">
+<img width="1000" src="./figure/pipeline.png" />
+</p>
 
 <div style="text-align: center;">      Figure 2: Overview of the proposed Efficient-Topformer. <span style="font-weight: bold;">Left</span>: the search space. <span style="font-weight: bold;">Right</span>: the search pipeline. The search space consists of CNN part and ViT part. In addition, we propose Coordinate Descend Search method to iteratively search for the optimal architecture.</div>
 
@@ -81,7 +85,9 @@ We followed NASViT to construct a CNN-ViT supernet in semantic segmentation. To 
 
 Therefore, we partition the large-scale search space into two parts (*i.e.* CNN \& ViT), which is elaborated in Table 1.  Following the design of BigNAS [24], we search the optimal channel width, block depth, expansion ratios and kernel size in CNN component. For the ViT component, we design the search space to include 5 variable factors: key dimension, value dimension, number of heads, MLP ratio, and block depth.
 
-![Table 1](figure/table1.jpg)
+<p align="center">
+<img width="1000" src="./figure/table1.jpg" />
+</p>
 
 <div style="text-align: center;">      Table 1: The search space of Efficient-Topformer. Tuples of three values in parentheses represent the lowest value, the highest value, and steps. <span style="font-weight: bold;">Note:</span> Query dim = Key dim, Value dim = Attention ratio &times; Key dim .</div>
 
@@ -94,7 +100,6 @@ $$
 \alpha^*=\underset{\alpha_A \in \mathcal{A}_\text{CNN}, \alpha_B \in \mathcal{A}_\text{ViT}}{\arg \max } \operatorname{Acc}_{\text {val }}(\mathcal{N}(\alpha_{\text{A}}, \alpha_{\text{B}}))
 $$
 </div>
-
 We further propose to utilize a Coordinate Descent Search (CDS) method to obtain the optimal architecture.
 The core idea of coordinate descent is to decompose a complex optimization problem into a series of simpler optimization problems, which can be solved iteratively. In cyclic coordinate descent, one iterates through the directions, minimizing the objective function with respect to each coordinate direction one at a time. This involves starting with an initial variable value
 \\(\mathbf{x}^0=\left(x_1^0, \ldots, x_n^0\right)\\) from round \\(k+1\\) defines \\(x^{k+1}\\) from \\(x^{k}\\) by iteratively solving the single variable optimization problems \\(x_i^{k+1}=\underset{u \in \mathbb{R}}{\arg \min } f\left(x_1^{k+1}, \ldots, x_{i-1}^{k+1}, y, x_{i+1}^k, \ldots, x_n^k\right)\\) for each variable \\(x_{i}\\) of \\(\mathbf{x}\\) , for \\(\textit{i}\\) from 1 to \\(\textit{n}\\). Thus, starting with an initial guess \\(x^{0}\\) for a local minimum of \\(F\\), one obtains an iterative sequence of variable values, \\(\mathbf{x}^0, \mathbf{x}^1, \mathbf{x}^2\\), \\(\ldots\\) iteratively.
@@ -115,15 +120,14 @@ $$
 \alpha^{k+1 *}_{\text{A}}=\underset{\alpha_{\text{A}} \in \mathcal{A}_\text{CNN}}{\arg \max }  \operatorname{Acc}_{\text{val}}(\mathcal{N}(\alpha_{\text{A}},\alpha^{k+1}_{\text{B}})))
 $$
 </div>
-
 In this way, we only need to search for a single part (either CNN or ViT) in the supernet once in a single iteration. 
 Coordinate Descent Search (CDS) method is used to achieve this by breaking down the large and heterogeneous search space into smaller and more homogeneous ones. CDS reduces the number of dimensions to search in each iteration, resulting in faster convergence and more accurate performance estimation than other search methods such as random search and evolutionary search.
 % To avoid the sampled sub-network perform not well in performance estimation due to not being sampled in the supernet, we finetune the sampled sub-network a few iterations to recover the accuracy before every evaluation. 
 After such iterative search process, we obtain the entire optimal sub-network under resource constraints. Finally, we retrain the sub-network on ImageNet and fine-tune it on specific semantic segmentation dataset. The overall algorithm is summarized in Algorithm 1.
 
-![Algorithm 1](figure/algorithm1.png)
-
-
+<p align="center">
+<img width="1000" src="./figure/algorithm1.png" />
+</p>
 
 ## 4 Experiments
 
@@ -141,7 +145,9 @@ Our implementation is based on MMSegmentation [38] and Pytorch. The supernet is 
 
 We perform the proposed Efficient-Topformer and find multiple models with diverse FLOPs constraints. The models were retrained on ImageNet and fine-tuned on specific semantic segmentation datasets. The results on ADE20K validation set are reported in Table 2. 
 
-![Table 2](figure/table2.png)
+<p align="center">
+<img width="1000" src="./figure/table2.png" />
+</p>
 
 <div style="text-align: center;">      Table 2: Results on ADE20K <em>val</em> set. Latency and FLOPs calculation adopt images with 512 &times; 512 resolution as input. * indicates results are obtained with 448 &times; 448 resolution as input. Latency is measured based on a single Qualcomm Snapdragon 865 processor. The mIoU is reported with single-scale inference.</div>
 
@@ -149,7 +155,9 @@ Latency is measured on a mobile device with a single Qualcomm Snapdragon 865 pro
 
 We further evaluate Efficient-Topformer on COCO-Stuff val set which is shown in Table 3. It can be seen that the base version of Efficient-Topformer achieves 34.64\\(\%\\) mIoU with 1.8G FLOPs, while outperforming TopFormer-B, by a mIoU of 1.21\\(\%\\) with the same FLOPs. It is shown that our approach achieves a better accuracy-efficiency trade-off than other previous approaches.
 
-![Table 3](figure/table3.png)
+<p align="center">
+<img width="1000" src="./figure/table3.png" />
+</p>
 
 <div style="text-align: center;">      Table 3: Results on COCO-Stuff <em>val</em> set. FLOPs calculation adopt images with 512 &times; 512 resolution as input. The mIoU is reported with single-scale inference.</div>
 
@@ -157,7 +165,9 @@ We further evaluate Efficient-Topformer on COCO-Stuff val set which is shown in 
 
 We show the architecture visualization of the searched models Efficient-Topformer-B, Efficient-Topformer-S, Efficient-Topformer-T in Figure 3. For brevity, we only visualize the CNN and ViT part of different sub-networks.
 
-![Figure 3](figure/subnet.png)
+<p align="center">
+<img width="1000" src="./figure/subnet.png" />
+</p>
 
 <div style="text-align: center;">Figure 3: Architecture visualization of the models Efficient-Topformer-B, Efficient-Topformer-S, Efficient-Topformer-T.</div>
 
@@ -167,7 +177,9 @@ The architecture of Efficient-Topformer base model is a combination of a small C
 
 We present some visualization comparisons between TopFormer-B and the proposed Efficient-Topformer on the ADE20K validation (val) set. As shown in Figure 4, the proposed method could achieve better segmentation results than TopFormer-B.
 
-![Figure 4](figure/visualization.png)
+<p align="center">
+<img width="1000" src="./figure/visualization.png" />
+</p>
 
 <div style="text-align: center;">Figure 4: The visualization comparisons of the TopFormer-B and the proposed Efficient-Topformer on ADE20K val set. We use Efficient-Topformer-B to conduct visualization.</div>
 
