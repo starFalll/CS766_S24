@@ -35,8 +35,8 @@ Supernet-Based NAS typically adopts a weight sharing strategy [19, 20, 4]. The a
 $$
 W_{\mathcal{A}}=\underset{W}{\arg \min } \mathcal{L}_{\text {train}}(\mathcal{N}(\mathcal{A}, W)),
 $$
-where \\(\mathcal{L}_{\text {train}}\\) represents the loss function on the training dataset. To reduce memory usage, supernet-based methods usually sample sub-networks from \\(\mathcal{N}\\) for optimization. The second stage is to search architectures by ranking the performance
-of subnets \\(\alpha \in \mathcal{A}\\) based on the weights in \\(W_{\mathcal{A}}\\):
+where \\(\mathcal{L}\_{\text{train}}\\) represents the loss function on the training dataset. To reduce memory usage, supernet-based methods usually sample sub-networks from \\(\mathcal{N}\\) for optimization. The second stage is to search architectures by ranking the performance
+of subnets \\(\alpha \in \mathcal{A}\\) based on the weights in \\(W\_{\mathcal{A}}\\):
 $$
 \alpha^*=\underset{\alpha \in \mathcal{A}}{\arg \max } Acc_{\text {val }}(\mathcal{N}(\alpha, w)),
 $$
@@ -49,7 +49,7 @@ AttentiveNAS [25] uses a sampling strategy to identify the networks on the Paret
 
 The recent work TopFormer [18] is a lightweight vision transformer for mobile semantic segmentation that consists of four parts: Token Pyramid Module, Semantics Extractor, Semantics Injection Module and Segmentation Head. 
 
-The Token Pyramid Module is built using a few CNN-based modules (\textit{i.e.} MobileNetV2 blocks) that quickly produce local features pyramid from high-resolution images with a fast down-sampling strategy.  
+The Token Pyramid Module is built using a few CNN-based modules (*i.e.* MobileNetV2 blocks) that quickly produce local features pyramid from high-resolution images with a fast down-sampling strategy.  
 
 To obtain rich semantics and a large receptive field, ViT-based Semantics Extractor takes tokens as input and uses average pooling to reduce their number for computational efficiency. Unlike ViT [11] and LeViT [13] use the last output of the embedding layer as input, TopFormer pools tokens from different scales and concatenates them along the channel dimension. The new tokens are fed into the Transformer to produce global semantics. Due to the residual connections, the learned semantics are related to scales of tokens, denoted as scale-aware global semantics. 
 
@@ -86,11 +86,11 @@ We further propose to utilize a Coordinate Descent Search (CDS) method to obtain
 The core idea of coordinate descent is to decompose a complex optimization problem into a series of simpler optimization problems, which can be solved iteratively. In cyclic coordinate descent, one iterates through the directions, minimizing the objective function with respect to each coordinate direction one at a time. This involves starting with an initial variable value
 \\(\mathbf{x}^0=\left(x_1^0, \ldots, x_n^0\right)\\) from round \\(k+1\\) defines \\(x^{k+1}\\) from \\(x^{k}\\) by iteratively solving the single variable optimization problems \\(x_i^{k+1}=\underset{u \in \mathbb{R}}{\arg \min } f\left(x_1^{k+1}, \ldots, x_{i-1}^{k+1}, y, x_{i+1}^k, \ldots, x_n^k\right)\\) for each variable \\(x_{i}\\) of \\(\mathbf{x}\\) , for \\(\textit{i}\\) from 1 to \\(\textit{n}\\). Thus, starting with an initial guess \\(x^{0}\\) for a local minimum of \\(F\\), one obtains an iterative sequence of variable values, \\(\mathbf{x}^0, \mathbf{x}^1, \mathbf{x}^2\\), \\(\ldots\\) iteratively.
 
-In order to effectively search for the optimal CNN sub-network and optimal ViT sub-network, we perform an alternate search for the best architecture of CNN part and ViT part during the search process. Specifically, we start by randomly sampling a network architecture \\(\alpha^0 = (\alpha^0_{\text{A}}, \alpha^0_{\text{B}})\\) under the FLOPs constraint. In the subsequent search round \\(\textit{k}+1\\), we keep CNN part \\(\alpha^k_{\text{A}}\\) fixed and sample the ViT part \\(\alpha^{k+1}_{\text{B}}\\) to search the optimal architecture of ViT part in supernet \\(\mathcal{N}\\), which can be formulated as
+In order to effectively search for the optimal CNN sub-network and optimal ViT sub-network, we perform an alternate search for the best architecture of CNN part and ViT part during the search process. Specifically, we start by randomly sampling a network architecture \\(\alpha^0 = (\alpha^0\_{\text{A}}, \alpha^0\_{\text{B}})\\) under the FLOPs constraint. In the subsequent search round \\(\textit{k}+1\\), we keep CNN part \\(\alpha^k_{\text{A}}\\) fixed and sample the ViT part \\(\alpha^{k+1}\_{\text{B}}\\) to search the optimal architecture of ViT part in supernet \\(\mathcal{N}\\), which can be formulated as
 $$
 \alpha^{k+1 *}_{\text{B}}=\underset{\alpha_{\text{B}} \in \mathcal{A}_\text{ViT}}{\arg \max }  \operatorname{Acc}_{\text {val }}(\mathcal{N}(\alpha^k_{\text{A}},\alpha_{\text{B}}))
 $$
-After obtaining the optimal ViT sub-network architecture in the previous step, we fixed the ViT part \\(\alpha^{k+1}_{\text{B}}\\) and sample the CNN part \\(\alpha^{k+1}_{\text{A}}\\) for the optimal CNN architecture in supernet \\(\mathcal{N}\\), which can be represented as
+After obtaining the optimal ViT sub-network architecture in the previous step, we fixed the ViT part \\(\alpha^{k+1}\_{\text{B}}\\) and sample the CNN part \\(\alpha^{k+1}_{\text{A}}\\) for the optimal CNN architecture in supernet \\(\mathcal{N}\\), which can be represented as
 $$
 \alpha^{k+1 *}_{\text{A}}=\underset{\alpha_{\text{A}} \in \mathcal{A}_\text{CNN}}{\arg \max }  \operatorname{Acc}_{\text{val}}(\mathcal{N}(\alpha_{\text{A}},\alpha^{k+1}_{\text{B}})))
 $$
