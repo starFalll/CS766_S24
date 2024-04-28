@@ -31,16 +31,16 @@ Before presenting our method, we first briefly review the background of the Supe
 
 ### 2.1 Supernet-Based NAS
 
-Supernet-Based NAS typically adopts a weight sharing strategy [19, 20, 4]. The architecture search space $\mathcal{A}$ is encoded into a supernet $\mathcal{N}(\mathcal{A}, W)$, where $W$ is the weight of the supernet and is shared across all the candidate architectures. The search for the optimal architecture $\alpha^*$ in One-shot NAS is usually formulated as a two-stage optimization problem. The first stage is to optimize the weight $W$ by 
+Supernet-Based NAS typically adopts a weight sharing strategy [19, 20, 4]. The architecture search space \(\mathcal{A}\) is encoded into a supernet \(\mathcal{N}(\mathcal{A}, W)\), where \(W\) is the weight of the supernet and is shared across all the candidate architectures. The search for the optimal architecture \(\alpha^*\) in One-shot NAS is usually formulated as a two-stage optimization problem. The first stage is to optimize the weight \(W\) by 
 $$
 W_{\mathcal{A}}=\underset{W}{\arg \min } \mathcal{L}_{\text {train}}(\mathcal{N}(\mathcal{A}, W)),
 $$
-where $\mathcal{L}_{\text {train}}$ represents the loss function on the training dataset. To reduce memory usage, supernet-based methods usually sample sub-networks from $\mathcal{N}$ for optimization. The second stage is to search architectures by ranking the performance
-of subnets $\alpha \in \mathcal{A}$ based on the weights in $W_{\mathcal{A}}$:
+where \(\mathcal{L}_{\text {train}}\) represents the loss function on the training dataset. To reduce memory usage, supernet-based methods usually sample sub-networks from \(\mathcal{N}\) for optimization. The second stage is to search architectures by ranking the performance
+of subnets \(\alpha \in \mathcal{A}\) based on the weights in \(W_{\mathcal{A}}\):
 $$
 \alpha^*=\underset{\alpha \in \mathcal{A}}{\arg \max } Acc_{\text {val }}(\mathcal{N}(\alpha, w)),
 $$
-where the sampled subnet $\alpha$ inherits weight $w$ from $W_{\mathcal{A}}$, and $Acc_{\text {val}}$ indicates the accuracy of the architecture $\alpha$ on the validation dataset. As it is impossible to enumerate all the architectures $\alpha \in \mathcal{A}$ for evaluation, prior works use random search [22], evolution algorithms [19] or reinforcement learning [23] to find the most promising one. 
+where the sampled subnet \(\alpha\) inherits weight \(w\) from \(W_{\mathcal{A}}\), and \(Acc_{\text {val}}\) indicates the accuracy of the architecture \(\alpha\) on the validation dataset. As it is impossible to enumerate all the architectures \(\alpha \in \mathcal{A}\) for evaluation, prior works use random search [22], evolution algorithms [19] or reinforcement learning [23] to find the most promising one. 
 
 OFA [3] proposes a progressive training approach where a single full network is pre-trained and then distilled to obtain smaller networks. BigNAS [24] simultaneously optimizes the supernet and sub-networks for each mini-batch using a sandwich sampling rule and inplace knowledge distillation (KD). 
 AttentiveNAS [25] uses a sampling strategy to identify the networks on the Pareto during training for better performance Pareto.
@@ -84,13 +84,13 @@ $$
 $$
 We further propose to utilize a Coordinate Descent Search (CDS) method to obtain the optimal architecture.
 The core idea of coordinate descent is to decompose a complex optimization problem into a series of simpler optimization problems, which can be solved iteratively. In cyclic coordinate descent, one iterates through the directions, minimizing the objective function with respect to each coordinate direction one at a time. This involves starting with an initial variable value
-$\mathbf{x}^0=\left(x_1^0, \ldots, x_n^0\right)$ from round $k+1$ defines $x^{k+1}$ from $x^{k}$ by iteratively solving the single variable optimization problems $x_i^{k+1}=\underset{u \in \mathbb{R}}{\arg \min } f\left(x_1^{k+1}, \ldots, x_{i-1}^{k+1}, y, x_{i+1}^k, \ldots, x_n^k\right)$ for each variable $x_{i}$ of $\mathbf{x}$ , for $\textit{i}$ from 1 to $\textit{n}$. Thus, starting with an initial guess $x^{0}$ for a local minimum of $F$, one obtains an iterative sequence of variable values, $\mathbf{x}^0, \mathbf{x}^1, \mathbf{x}^2$, $\ldots$ iteratively.
+\(\mathbf{x}^0=\left(x_1^0, \ldots, x_n^0\right)\) from round \(k+1\) defines \(x^{k+1}\) from \(x^{k}\) by iteratively solving the single variable optimization problems \(x_i^{k+1}=\underset{u \in \mathbb{R}}{\arg \min } f\left(x_1^{k+1}, \ldots, x_{i-1}^{k+1}, y, x_{i+1}^k, \ldots, x_n^k\right)\) for each variable \(x_{i}\) of \(\mathbf{x}\) , for \(\textit{i}\) from 1 to \(\textit{n}\). Thus, starting with an initial guess \(x^{0}\) for a local minimum of \(F\), one obtains an iterative sequence of variable values, \(\mathbf{x}^0, \mathbf{x}^1, \mathbf{x}^2\), \(\ldots\) iteratively.
 
-In order to effectively search for the optimal CNN sub-network and optimal ViT sub-network, we perform an alternate search for the best architecture of CNN part and ViT part during the search process. Specifically, we start by randomly sampling a network architecture $\alpha^0 = (\alpha^0_{\text{A}}, \alpha^0_{\text{B}})$ under the FLOPs constraint. In the subsequent search round $\textit{k}+1$, we keep CNN part $\alpha^k_{\text{A}}$ fixed and sample the ViT part $\alpha^{k+1}_{\text{B}}$ to search the optimal architecture of ViT part in supernet $\mathcal{N}$, which can be formulated as
+In order to effectively search for the optimal CNN sub-network and optimal ViT sub-network, we perform an alternate search for the best architecture of CNN part and ViT part during the search process. Specifically, we start by randomly sampling a network architecture \(\alpha^0 = (\alpha^0_{\text{A}}, \alpha^0_{\text{B}})\) under the FLOPs constraint. In the subsequent search round \(\textit{k}+1\), we keep CNN part \(\alpha^k_{\text{A}}\) fixed and sample the ViT part \(\alpha^{k+1}_{\text{B}}\) to search the optimal architecture of ViT part in supernet \(\mathcal{N}\), which can be formulated as
 $$
 \alpha^{k+1 *}_{\text{B}}=\underset{\alpha_{\text{B}} \in \mathcal{A}_\text{ViT}}{\arg \max }  \operatorname{Acc}_{\text {val }}(\mathcal{N}(\alpha^k_{\text{A}},\alpha_{\text{B}}))
 $$
-After obtaining the optimal ViT sub-network architecture in the previous step, we fixed the ViT part $\alpha^{k+1}_{\text{B}}$ and sample the CNN part $\alpha^{k+1}_{\text{A}}$ for the optimal CNN architecture in supernet $\mathcal{N}$, which can be represented as
+After obtaining the optimal ViT sub-network architecture in the previous step, we fixed the ViT part \(\alpha^{k+1}_{\text{B}}\) and sample the CNN part \(\alpha^{k+1}_{\text{A}}\) for the optimal CNN architecture in supernet \(\mathcal{N}\), which can be represented as
 $$
 \alpha^{k+1 *}_{\text{A}}=\underset{\alpha_{\text{A}} \in \mathcal{A}_\text{CNN}}{\arg \max }  \operatorname{Acc}_{\text{val}}(\mathcal{N}(\alpha_{\text{A}},\alpha^{k+1}_{\text{B}})))
 $$
@@ -123,9 +123,9 @@ We perform the proposed Efficient-Topformer and find multiple models with divers
 
 <div style="text-align: center;">      Table 2: Results on ADE20K <em>val</em> set. Latency and FLOPs calculation adopt images with 512 &times; 512 resolution as input. * indicates results are obtained with 448 &times; 448 resolution as input. Latency is measured based on a single Qualcomm Snapdragon 865 processor. The mIoU is reported with single-scale inference.</div>
 
-Latency is measured on a mobile device with a single Qualcomm Snapdragon 865 processor. Our Efficient-Topformer model family achieves higher accuracy than the other methods with similar or lower FLOPs, including DeepLabV3+ [33], HR-NAS [10], Segformer [16], and TopFormer [18]. In particular, our base model, Efficient-Topformer-B, achieves a mIoU of 40.5$\%$ using 1.8G FLOPs, which is 2.7$\%$ higher than TopFormer-B with similar FLOPs and latency. Our models outperform TopFormer by 2.8$\%$ and 3.6$\%$ with FLOPs of 1.2G and 1.6G, respectively. Moreover, Efficient-Topformer-T achieves real-time inference with a mIoU of 35.24$\%$ when the input resolution is 448 $\times$ 448, which is 2.7$\%$ higher than TopFormer-T.
+Latency is measured on a mobile device with a single Qualcomm Snapdragon 865 processor. Our Efficient-Topformer model family achieves higher accuracy than the other methods with similar or lower FLOPs, including DeepLabV3+ [33], HR-NAS [10], Segformer [16], and TopFormer [18]. In particular, our base model, Efficient-Topformer-B, achieves a mIoU of 40.5\(\%\) using 1.8G FLOPs, which is 2.7\(\%\) higher than TopFormer-B with similar FLOPs and latency. Our models outperform TopFormer by 2.8\(\%\) and 3.6\(\%\) with FLOPs of 1.2G and 1.6G, respectively. Moreover, Efficient-Topformer-T achieves real-time inference with a mIoU of 35.24\(\%\) when the input resolution is 448 \(\times\) 448, which is 2.7\(\%\) higher than TopFormer-T.
 
-We further evaluate Efficient-Topformer on COCO-Stuff val set which is shown in Table 3. It can be seen that the base version of Efficient-Topformer achieves 34.64$\%$ mIoU with 1.8G FLOPs, while outperforming TopFormer-B, by a mIoU of 1.21$\%$ with the same FLOPs. It is shown that our approach achieves a better accuracy-efficiency trade-off than other previous approaches.
+We further evaluate Efficient-Topformer on COCO-Stuff val set which is shown in Table 3. It can be seen that the base version of Efficient-Topformer achieves 34.64\(\%\) mIoU with 1.8G FLOPs, while outperforming TopFormer-B, by a mIoU of 1.21\(\%\) with the same FLOPs. It is shown that our approach achieves a better accuracy-efficiency trade-off than other previous approaches.
 
 ![Table 3](figure/table3.png)
 
