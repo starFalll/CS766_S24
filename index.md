@@ -21,7 +21,7 @@ As shown in Figure 1, the NAS model searched by our algorithm can achieve the b
     
 -   We proposed a novel CDS method to efficiently explore the proposed search space. This method is both simple and effective, allowing for quick convergence in problems where computing gradients is infeasible (e.g. architecture search).
 
-![Figure 1](figure/pareto.pdf)
+![Figure 1](figure/pareto.png)
 
 <div style="text-align: center;">      Figure 1: The latency, mIoU performance versus model size on the ADE20K val set. Our methods achieve a better accuracy-latency trade-off. The latency is measured on a single Qualcomm Snapdragon 865 with input size 512×512, and only an ARM CPU core is used for speed testing. * indicates the input size is 448×448.</div>
 
@@ -59,7 +59,7 @@ Finally, TopFormer splits scale-aware global semantics by channels of tokens fro
 
 The overview of Efficient-Topformer is illustrated in Figure 2, which aims to find an efficient model for semantic segmentation. We design a new search space that takes advantage of both CNN and ViT (Sec 31.). Additionally, to fully utilize the supernets, we proposed Coordinate Descent Search to search the optimal model (Sec 3.2).
 
-![Figure 2](figure/pipeline.pdf)
+![Figure 2](figure/pipeline.png)
 
 <div style="text-align: center;">      Figure 2: Overview of the proposed Efficient-Topformer. <span style="font-weight: bold;">Left</span>: the search space. <span style="font-weight: bold;">Right</span>: the search pipeline. The search space consists of CNN part and ViT part. In addition, we propose Coordinate Descend Search method to iteratively search for the optimal architecture.</div>
 
@@ -135,7 +135,7 @@ We further evaluate Efficient-Topformer on COCO-Stuff val set which is shown in 
 
 We show the architecture visualization of the searched models Efficient-Topformer-B, Efficient-Topformer-S, Efficient-Topformer-T in Figure 3. For brevity, we only visualize the CNN and ViT part of different sub-networks.
 
-![Figure 3](figure/subnet.pdf)
+![Figure 3](figure/subnet.png)
 
 <div style="text-align: center;">Figure 3: Architecture visualization of the models Efficient-Topformer-B, Efficient-Topformer-S, Efficient-Topformer-T.</div>
 
@@ -145,7 +145,7 @@ The architecture of Efficient-Topformer base model is a combination of a small C
 
 We present some visualization comparisons between TopFormer-B and the proposed Efficient-Topformer on the ADE20K validation (val) set. As shown in Figure 4, the proposed method could achieve better segmentation results than TopFormer-B.
 
-![Figure 4](figure/visualization.pdf)
+![Figure 4](figure/visualization.png)
 
 <div style="text-align: center;">Figure 4: The visualization comparisons of the TopFormer-B and the proposed Efficient-Topformer on ADE20K val set. We use Efficient-Topformer-B to conduct visualization.</div>
 
