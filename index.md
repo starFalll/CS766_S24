@@ -37,8 +37,8 @@ Supernet-Based NAS typically adopts a weight sharing strategy [19, 20, 4]. The a
 $$
 W_{\mathcal{A}}=\underset{W}{\arg \min } \mathcal{L}_{\text {train}}(\mathcal{N}(\mathcal{A}, W)),
 $$
-    <span style="float: right;">(1)</span>
 </div>
+
 where \\(\mathcal{L}\_{\text{train}}\\) represents the loss function on the training dataset. To reduce memory usage, supernet-based methods usually sample sub-networks from \\(\mathcal{N}\\) for optimization. The second stage is to search architectures by ranking the performance
 of subnets \\(\alpha \in \mathcal{A}\\) based on the weights in \\(W\_{\mathcal{A}}\\):
 
@@ -46,8 +46,8 @@ of subnets \\(\alpha \in \mathcal{A}\\) based on the weights in \\(W\_{\mathcal{
 $$
 \alpha^*=\underset{\alpha \in \mathcal{A}}{\arg \max } Acc_{\text {val }}(\mathcal{N}(\alpha, w)),
 $$
-    <span style="float: right;">(2)</span>
 </div>
+
 
 where the sampled subnet \\(\alpha\\) inherits weight \\(w\\) from \\(W_{\mathcal{A}}\\), and \\(Acc_{\text {val}}\\) indicates the accuracy of the architecture \\(\alpha\\) on the validation dataset. As it is impossible to enumerate all the architectures \\(\alpha \in \mathcal{A}\\) for evaluation, prior works use random search [22], evolution algorithms [19] or reinforcement learning [23] to find the most promising one. 
 
@@ -93,7 +93,6 @@ In addition, we introduce a novel algorithm for searching in this heterogeneous 
 $$
 \alpha^*=\underset{\alpha_A \in \mathcal{A}_\text{CNN}, \alpha_B \in \mathcal{A}_\text{ViT}}{\arg \max } \operatorname{Acc}_{\text {val }}(\mathcal{N}(\alpha_{\text{A}}, \alpha_{\text{B}}))
 $$
-    <span style="float: right;">(3)</span>
 </div>
 
 We further propose to utilize a Coordinate Descent Search (CDS) method to obtain the optimal architecture.
@@ -106,8 +105,8 @@ In order to effectively search for the optimal CNN sub-network and optimal ViT s
 $$
 \alpha^{k+1 *}_{\text{B}}=\underset{\alpha_{\text{B}} \in \mathcal{A}_\text{ViT}}{\arg \max }  \operatorname{Acc}_{\text {val }}(\mathcal{N}(\alpha^k_{\text{A}},\alpha_{\text{B}}))
 $$
-    <span style="float: right;">(4)</span>
 </div>
+
 
 After obtaining the optimal ViT sub-network architecture in the previous step, we fixed the ViT part \\(\alpha^{k+1}\_{\text{B}}\\) and sample the CNN part \\(\alpha^{k+1}_{\text{A}}\\) for the optimal CNN architecture in supernet \\(\mathcal{N}\\), which can be represented as
 
@@ -115,7 +114,6 @@ After obtaining the optimal ViT sub-network architecture in the previous step, w
 $$
 \alpha^{k+1 *}_{\text{A}}=\underset{\alpha_{\text{A}} \in \mathcal{A}_\text{CNN}}{\arg \max }  \operatorname{Acc}_{\text{val}}(\mathcal{N}(\alpha_{\text{A}},\alpha^{k+1}_{\text{B}})))
 $$
-    <span style="float: right;">(5)</span>
 </div>
 
 In this way, we only need to search for a single part (either CNN or ViT) in the supernet once in a single iteration. 
