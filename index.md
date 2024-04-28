@@ -109,7 +109,7 @@ In this section, we first describe the semantic segmentation datasets and implem
 
 ### 4.1 Datasets
 
-We perform experiments on two datasets, ADE20K [36] and COCO-Stuff [37], using mean of class-wise intersection over union (mIoU) as the evaluation metric. All the models are converted to [TNN: A high-performance, lightweight neural network inference framework.](https://github.com/Tencent/TNN}{https://github.com/Tencent/TNN) for latency measurement on an ARM-based computing core. **ADE20K**: The ADE20K dataset contains 25K images, covering 150 categories. All images are split into 20K/2K/3K for training, validation, and testing. **COCO-Stuff**: The COCO-Stuff [37] dataset contains 10000 complex images selected from COCO, with 9K in the training set and 1K in the test set.
+We perform experiments on two datasets, ADE20K [36] and COCO-Stuff [37], using mean of class-wise intersection over union (mIoU) as the evaluation metric. All the models are converted to [TNN: A high-performance, lightweight neural network inference framework.](https://github.com/Tencent/TNN) for latency measurement on an ARM-based computing core. **ADE20K**: The ADE20K dataset contains 25K images, covering 150 categories. All images are split into 20K/2K/3K for training, validation, and testing. **COCO-Stuff**: The COCO-Stuff [37] dataset contains 10000 complex images selected from COCO, with 9K in the training set and 1K in the test set.
 
 ### 4.2 Implementation Details
 
