@@ -31,7 +31,7 @@ Before presenting our method, we first briefly review the background of the Supe
 
 ### 2.1 Supernet-Based NAS
 
-Supernet-Based NAS typically adopts a weight sharing strategy [19, 20, 4]. The architecture search space \(\mathcal{A}\) is encoded into a supernet \(\mathcal{N}(\mathcal{A}, W)\), where \(W\) is the weight of the supernet and is shared across all the candidate architectures. The search for the optimal architecture \(\alpha^*\) in One-shot NAS is usually formulated as a two-stage optimization problem. The first stage is to optimize the weight \(W\) by 
+Supernet-Based NAS typically adopts a weight sharing strategy [19, 20, 4]. The architecture search space \\(\mathcal{A}\\) is encoded into a supernet \(\mathcal{N}(\mathcal{A}, W)\), where \(W\) is the weight of the supernet and is shared across all the candidate architectures. The search for the optimal architecture \(\alpha^*\) in One-shot NAS is usually formulated as a two-stage optimization problem. The first stage is to optimize the weight \(W\) by 
 $$
 W_{\mathcal{A}}=\underset{W}{\arg \min } \mathcal{L}_{\text {train}}(\mathcal{N}(\mathcal{A}, W)),
 $$
