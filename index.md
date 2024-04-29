@@ -65,7 +65,7 @@ Finally, TopFormer splits scale-aware global semantics by channels of tokens fro
 The overview of Efficient-Topformer is illustrated in Figure 1, which aims to find an efficient model for semantic segmentation. We design a new search space that takes advantage of both CNN and ViT (Sec 31.). Additionally, to fully utilize the supernets, we proposed Coordinate Descent Search to search the optimal model (Sec 3.2).
 
 <p style="text-align: center;">
-<img width="1000" src="./figure/pipeline.png"  alt="Figure 1"/>
+<img width="900" src="./figure/pipeline.png"  alt="Figure 1"/>
 </p>
 Figure 1: Overview of the proposed Efficient-Topformer. <span style="font-weight: bold;">Left</span>: the search space. <span style="font-weight: bold;">Right</span>: the search pipeline. The search space consists of CNN part and ViT part. In addition, we propose Coordinate Descend Search method to iteratively search for the optimal architecture.
 
