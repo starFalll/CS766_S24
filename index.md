@@ -160,7 +160,7 @@ We show the architecture visualization of the searched models Efficient-Topforme
 </p>
 Figure 2: Architecture visualization of the models Efficient-Topformer-B, Efficient-Topformer-S, Efficient-Topformer-T.
 
-The architecture of Efficient-Topformer base model is a combination of a small CNN and a large ViT, with a total of 1.8G FLOPs. The CNN architecture has many channels and a large kernel size to facilitate rich feature learning, while maintaining a small depth and expand ratio for improved efficiency. The ViT component employs a large number of heads, QKV dimension, and depth to capture the full-image receptive field and model global interactions. This hybrid architecture balances accuracy and efficiency by leveraging the strengths of both CNN and ViT. The details of the architectures are provided in the supplementary materials.
+The architecture of Efficient-Topformer base model is a combination of a small CNN and a large ViT, with a total of 1.8G FLOPs. The CNN architecture has many channels and a large kernel size to facilitate rich feature learning, while maintaining a small depth and expand ratio for improved efficiency. The ViT component employs a large number of heads, QKV dimension, and depth to capture the full-image receptive field and model global interactions. This hybrid architecture balances accuracy and efficiency by leveraging the strengths of both CNN and ViT.
 
 ## 5 Visualization
 
