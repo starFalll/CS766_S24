@@ -182,6 +182,14 @@ We present some visualization comparisons between TopFormer-B and the proposed E
 
 In this work, we propose a novel architecture search method for effective semantic segmentation, named Efficient-Topformer. Specifically, we first propose a search space that takes advantage of CNN and ViT simultaneously. To further search in the search space, we propose a Coordinate Descent Search method, which is beneficial to search for the optimal architecture in the aforementioned search spaces. Extensive experiments demonstrate that the searched models outperform other methods under various FLOPs constraints.
 
+## Presentation Slide
+
+[link to view presentation slide](https://github.com/starFalll/CS766_S24/blob/main/docs/presentation.pdf)
+
+## Demos
+
+
+
 ## References
 
 1. Hanxiao Liu, Karen Simonyan, and Yiming Yang. Darts: Differentiable architecture search. arXiv preprint arXiv:1806.09055, 2018.
