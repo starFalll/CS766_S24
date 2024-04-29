@@ -4,4 +4,4 @@
 
 [https://starfalll.github.io/CS766_S24/](https://starfalll.github.io/CS766_S24/)
 
-Demos: [https://github.com/wmkai/NAS](https://github.com/wmkai/NAS)
+Code and Demos: [https://github.com/wmkai/NAS](https://github.com/wmkai/NAS)
