@@ -107,15 +107,13 @@ $$
 
 After obtaining the optimal ViT sub-network architecture in the previous step, we fixed the ViT part \\(\alpha^{k+1}\_{\text{B}}\\) and sample the CNN part \\(\alpha^{k+1}_{\text{A}}\\) for the optimal CNN architecture in supernet \\(\mathcal{N}\\), which can be represented as
 
-This approach allows us to streamline the search process by focusing on a single component (either CNN or ViT) within the supernet in each iteration. The Coordinate Descent Search (CDS) method facilitates this by breaking down the large and heterogeneous search space into smaller and more homogeneous ones. By reducing the number of dimensions to search in each iteration, CDS promotes faster convergence and more accurate performance estimation compared to other search methods such as random search and evolutionary search.
-To ensure that sampled sub-networks perform well in performance estimation, despite not being directly sampled from the supernet, we fine-tune each sampled sub-network for a few iterations to restore accuracy before conducting any evaluations.
-Following this iterative search process, we derive the optimal sub-network within the specified resource constraints. Subsequently, we retrain the sub-network on ImageNet and fine-tune it on the specific semantic segmentation dataset. The overarching algorithm is summarized in Algorithm 1.`<div style="text-align: center;">`
-
 $$
 \alpha^{k+1 *}_{\text{A}}=\underset{\alpha_{\text{A}} \in \mathcal{A}_\text{CNN}}{\arg \max }  \operatorname{Acc}_{\text{val}}(\mathcal{N}(\alpha_{\text{A}},\alpha^{k+1}_{\text{B}})))
 $$
 
-</div>
+This approach allows us to streamline the search process by focusing on a single component (either CNN or ViT) within the supernet in each iteration. The Coordinate Descent Search (CDS) method facilitates this by breaking down the large and heterogeneous search space into smaller and more homogeneous ones. By reducing the number of dimensions to search in each iteration, CDS promotes faster convergence and more accurate performance estimation compared to other search methods such as random search and evolutionary search.
+To ensure that sampled sub-networks perform well in performance estimation, despite not being directly sampled from the supernet, we fine-tune each sampled sub-network for a few iterations to restore accuracy before conducting any evaluations.
+Following this iterative search process, we derive the optimal sub-network within the specified resource constraints. Subsequently, we retrain the sub-network on ImageNet and fine-tune it on the specific semantic segmentation dataset. The overarching algorithm is summarized in Algorithm 1.
 
 <p style="text-align: center;">
 <img width="600" src="./figure/algorithm1.png"  alt="Algorithm 1"/>
@@ -168,7 +166,9 @@ We show the architecture visualization of the searched models Efficient-Topforme
 </p>
 Figure 2: Architecture visualization of the models Efficient-Topformer-B, Efficient-Topformer-S, Efficient-Topformer-T.
 
-The architecture of Efficient-Topformer base model is a combination of a small CNN and a large ViT, with a total of 1.8G FLOPs. The CNN architecture has many channels and a large kernel size to facilitate rich feature learning, while maintaining a small depth and expand ratio for improved efficiency. The ViT component employs a large number of heads, QKV dimension, and depth to capture the full-image receptive field and model global interactions. This hybrid architecture balances accuracy and efficiency by leveraging the strengths of both CNN and ViT.
+The architecture of the Efficient-Topformer base model constitutes a fusion of a compact CNN and an expansive ViT, resulting in a total of 1.8G FLOPs. The CNN component is designed with numerous channels and a sizable kernel size to facilitate comprehensive feature learning, while maintaining a shallow depth and expand ratio to enhance efficiency.
+
+On the other hand, the ViT component is characterized by an abundance of heads, QKV dimension, and depth, enabling it to capture the complete image receptive field and effectively model global interactions. This hybrid architecture achieves a delicate balance between accuracy and efficiency by capitalizing on the inherent strengths of both CNN and ViT architectures.
 
 ## 5 Visualization
 
@@ -182,7 +182,7 @@ Figure 3: The visualization comparisons of the TopFormer-B and the proposed Effi
 
 ## 6 Conclusion
 
-In this work, we propose a novel architecture search method for effective semantic segmentation, named Efficient-Topformer. Specifically, we first propose a search space that takes advantage of CNN and ViT simultaneously. To further search in the search space, we propose a Coordinate Descent Search method, which is beneficial to search for the optimal architecture in the aforementioned search spaces. Extensive experiments demonstrate that the searched models outperform other methods under various FLOPs constraints.
+In this study, we introduce a novel architecture search approach tailored for efficient semantic segmentation, coined Efficient-Topformer. Initially, we devise a search space that effectively leverages the strengths of both CNN and ViT architectures. Subsequently, to navigate this intricate search space, we introduce a Coordinate Descent Search method, which proves instrumental in identifying the optimal architecture within the proposed search spaces. Our extensive experimentation showcases that the models derived through this search process consistently outperform existing methods across diverse FLOPs constraints.
 
 ## Presentation Slide
 
