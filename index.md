@@ -2,24 +2,25 @@
 layout: default
 ---
 # Neural Architecture Search for Mobile Semantic Segmentation
+
 ### CS766 2024 Spring project
+
 ### Mingkai Wang, Jidong Xu, Ethan Fang
 
 ## 1 Introduction and Motivation
 
-Neural architecture search (NAS) has been successful in designing efficient models for various tasks, such as image classification [1, 2, 3, 4, 5, 6], object detection [7, 8] and semantic segmentation [9, 10]. Considering the great progress of transformer-based architectures in the literature [11, 12, 13], we conclude that searching for effective semantic segmentation needs improvements in search space, performance estimation and search algorithm to further promote the performance.
+Neural architecture search (NAS) has proven effective in crafting streamlined models across diverse domains like image classification [1, 2, 3, 4, 5, 6], object detection [7, 8], and semantic segmentation [9, 10]. Considering the substantial strides made by transformer-based architectures in the field [11, 12, 13], it's evident that refining the search space, performance estimation, and search algorithms is crucial for advancing semantic segmentation effectiveness.
 
-More specifically, we discuss and solve two important problems in this paper. The first problem is: **How to design the search space for effective semantic segmentation?** The typical workflow of semantic segmentation methods [14, 15, 16] use a encoder-decoder architecture. The encoder usually adopts an image classification network to take the high-resolution images as input and output a high-level feature representation. And then, the decoder uses the low-resolution feature maps from the encoder, gradually increasing the size of the feature map for the final prediction. 
+In this paper, we tackle two pivotal issues. The first query is: **How can we optimize the search space for proficient semantic segmentation?** Traditional semantic segmentation methods [14, 15, 16] typically employ an encoder-decoder framework. The encoder leverages an image classification network to process high-resolution images into a high-level feature representation. Subsequently, the decoder utilizes these features to progressively upscale the feature map for final prediction.
 
-A number of approaches [17, 16, 18] propose to replace the CNN-based encoder using transformer layers to model global interactions of all pixels in the feature map. While CNNs are computationally efficient, they lack the ability to model global interactions, whereas Vision Transformers (ViT) use global self-attention on high-resolution tokens, which can be computationally expensive due to the quadratic complexity of the number of tokens. To fully take advantage of both CNNs and ViT, we propose a search space consisting of a sequential combination of CNN and ViT. First, a few CNN-based modules process high-resolution images to generate local pyramid features. Then, a ViT-based module takes these features as input and captures a full-image receptive field and rich semantics. This combination yields a simple decoder with excellent performance, as demonstrated in recent work such as TopFormer [18].
+Several strategies [17, 16, 18] propose replacing the CNN-based encoder with transformer layers to capture global interactions among all pixels in the feature map. While CNNs are computationally efficient, they lack global interaction modeling, unlike Vision Transformers (ViT) which employ global self-attention on high-resolution tokens. However, ViT's computational overhead due to quadratic complexity impedes its practicality. To harness the strengths of both CNNs and ViT, we propose a hybrid search space comprising a sequential fusion of CNN and ViT. Initially, a few CNN-based modules process high-resolution images to generate localized pyramid features. Subsequently, a ViT-based module ingests these features to capture a holistic image context and nuanced semantics. This amalgamation yields a streamlined decoder with impressive performance, as evidenced by recent work such as TopFormer [18].
 
-After determining the search space, it raises another problem: **How to search the optimal architecture in such HESS?** To efficiently search for the optimal architecture in the heterogeneous supernet, we propose a novel Coordinate Descent Search (CDS) method. Coordinate descent is an optimization algorithm that minimizes a function along coordinate directions. In each iteration, it selects a coordinate using a coordinate selection rule and minimizes over the corresponding coordinate hyperplane while fixing all other coordinates. We apply this method to alternately search for the optimal architecture of the CNN and ViT parts in the supernet. The optimal architecture composed of CNN and ViT is obtained through this iterative search process.
+Having defined the search space, another question emerges: **How do we navigate the optimal architecture within this Hybrid Encoder-Supervised Search (HESS)?** To efficiently navigate the heterogeneous supernet for the optimal architecture, we introduce a novel Coordinate Descent Search (CDS) method. Coordinate descent is an optimization algorithm that minimizes a function along coordinate axes. At each iteration, it selects a coordinate according to a predefined rule and minimizes along the corresponding axis while holding other coordinates constant. We employ this method to iteratively search for the optimal architecture of the CNN and ViT segments within the supernet. Through this iterative exploration, we derive the optimal architecture composed of CNN and ViT components.
 
-The NAS model searched by our algorithm can achieve the best accuracy vs. FLOPs trade-off. To summarize, we contribute in terms of search space, performance estimation and search algorithm as follows:
+The NAS model unearthed by our algorithm achieves an optimal balance between accuracy and computational complexity. To recap, our contributions encompass:
 
--   We design a new search space for efficient semantic segmentation that combines the strengths and mitigates the weaknesses of different architectures. Specifically, we use CNN to extract local features efficiently in the front layers, while utilizing ViT with a full-image receptive field to capture rich semantics. This design achieves a accuracy-efficiency trade-off. 
-    
--   We proposed a novel CDS method to efficiently explore the proposed search space. This method is both simple and effective, allowing for quick convergence in problems where computing gradients is infeasible (e.g. architecture search).
+* Designing a novel search space for efficient semantic segmentation, amalgamating the strengths of diverse architectures while mitigating their weaknesses. We employ CNNs for efficient local feature extraction in the initial layers, while leveraging ViT for holistic image understanding, striking a balance between accuracy and efficiency.
+* Introducing a novel CDS method to efficiently traverse the proposed search space. This method, simple yet effective, facilitates swift convergence in scenarios where computing gradients is impractical, such as architecture search.
 
 ## 2 Related Work and Background
 
@@ -27,7 +28,7 @@ Before presenting our method, we first briefly review the background of the Supe
 
 ### 2.1 Supernet-Based NAS
 
-Supernet-Based NAS typically adopts a weight sharing strategy [19, 20, 4]. The architecture search space \\(\mathcal{A}\\) is encoded into a supernet \\(\mathcal{N}(\mathcal{A}, W)\\), where \\(W\\) is the weight of the supernet and is shared across all the candidate architectures. The search for the optimal architecture \\(\alpha^*\\) in One-shot NAS is usually formulated as a two-stage optimization problem. The first stage is to optimize the weight \\(W\\) by 
+Supernet-Based NAS typically adopts a weight sharing strategy [19, 20, 4]. The architecture search space \\(\mathcal{A}\\) is encoded into a supernet \\(\mathcal{N}(\mathcal{A}, W)\\), where \\(W\\) is the weight of the supernet and is shared across all the candidate architectures. The search for the optimal architecture \\(\alpha^*\\) in One-shot NAS is usually formulated as a two-stage optimization problem. The first stage is to optimize the weight \\(W\\) by
 
 <div style="text-align: center;">
 $$
@@ -44,25 +45,24 @@ $$
 $$
 </div>
 
+where the sampled subnet \\(\alpha\\) inherits weight \\(w\\) from \\(W_{\mathcal{A}}\\), and \\(Acc_{\text {val}}\\) indicates the accuracy of the architecture \\(\alpha\\) on the validation dataset. As it is impossible to enumerate all the architectures \\(\alpha \in \mathcal{A}\\) for evaluation, prior works use random search [22], evolution algorithms [19] or reinforcement learning [23] to find the most promising one.
 
-where the sampled subnet \\(\alpha\\) inherits weight \\(w\\) from \\(W_{\mathcal{A}}\\), and \\(Acc_{\text {val}}\\) indicates the accuracy of the architecture \\(\alpha\\) on the validation dataset. As it is impossible to enumerate all the architectures \\(\alpha \in \mathcal{A}\\) for evaluation, prior works use random search [22], evolution algorithms [19] or reinforcement learning [23] to find the most promising one. 
-
-OFA [3] proposes a progressive training approach where a single full network is pre-trained and then distilled to obtain smaller networks. BigNAS [24] simultaneously optimizes the supernet and sub-networks for each mini-batch using a sandwich sampling rule and inplace knowledge distillation (KD). 
+OFA [3] proposes a progressive training approach where a single full network is pre-trained and then distilled to obtain smaller networks. BigNAS [24] simultaneously optimizes the supernet and sub-networks for each mini-batch using a sandwich sampling rule and inplace knowledge distillation (KD).
 AttentiveNAS [25] uses a sampling strategy to identify the networks on the Pareto during training for better performance Pareto.
 
-### 2.2 Efficient vision transformers in semantic segmentation {#architecture}
+### 2.2 Efficient vision transformers in semantic segmentation
 
-The recent work TopFormer [18] is a lightweight vision transformer for mobile semantic segmentation that consists of four parts: Token Pyramid Module, Semantics Extractor, Semantics Injection Module and Segmentation Head. 
+The recent development, TopFormer [18], introduces a lightweight vision transformer tailored for mobile semantic segmentation, comprising four integral components: the Token Pyramid Module, Semantics Extractor, Semantics Injection Module, and Segmentation Head.
 
-The Token Pyramid Module is built using a few CNN-based modules (*i.e.* MobileNetV2 blocks) that quickly produce local features pyramid from high-resolution images with a fast down-sampling strategy.  
+The Token Pyramid Module employs a set of CNN-based modules, such as MobileNetV2 blocks, to swiftly generate a local feature pyramid from high-resolution images through a rapid down-sampling approach.
 
-To obtain rich semantics and a large receptive field, ViT-based Semantics Extractor takes tokens as input and uses average pooling to reduce their number for computational efficiency. Unlike ViT [11] and LeViT [13] use the last output of the embedding layer as input, TopFormer pools tokens from different scales and concatenates them along the channel dimension. The new tokens are fed into the Transformer to produce global semantics. Due to the residual connections, the learned semantics are related to scales of tokens, denoted as scale-aware global semantics. 
+For capturing rich semantics and expanding the receptive field, the ViT-based Semantics Extractor processes tokens via average pooling to streamline computational efficiency. Unlike conventional approaches like ViT [11] and LeViT [13], which utilize the last output of the embedding layer, TopFormer adopts a distinctive method. It aggregates tokens from various scales, concatenating them along the channel dimension before inputting them into the Transformer to derive global semantics. Thanks to residual connections, the acquired semantics are intricately linked to token scales, characterized as scale-aware global semantics.
 
-Finally, TopFormer splits scale-aware global semantics by channels of tokens from different scales, fuses them with corresponding tokens in the Semantics Injection Module to augment representation, and uses the resulting augmented tokens as input for the segmentation head, resulting in the final per-pixel prediction.
+Subsequently, TopFormer dissects the scale-aware global semantics into channel-specific tokens from diverse scales, integrating them with corresponding tokens in the Semantics Injection Module to enhance representation. The resultant augmented tokens serve as input for the segmentation head, culminating in precise per-pixel predictions.
 
 ## 3 Methodology
 
-The overview of Efficient-Topformer is illustrated in Figure 1, which aims to find an efficient model for semantic segmentation. We design a new search space that takes advantage of both CNN and ViT (Sec 31.). Additionally, to fully utilize the supernets, we proposed Coordinate Descent Search to search the optimal model (Sec 3.2).
+The schematic of Efficient-Topformer, depicted in Figure 1, is devised with the objective of crafting an efficient model for semantic segmentation. We introduce a novel search space leveraging the strengths of both CNN and ViT architectures (Section 3.1). Furthermore, to maximize the utility of the supernets, we introduce the Coordinate Descent Search method for the exploration of the optimal model (Section 3.2).
 
 <p style="text-align: center;">
 <img width="900" src="./figure/pipeline.png"  alt="Figure 1"/>
@@ -71,21 +71,22 @@ Figure 1: Overview of the proposed Efficient-Topformer. <span style="font-weight
 
 ### 3.1 Search Space Design
 
-This paper aims to find a model achieving a better trade-off between accuracy and efficiency in semantic segmentation. To this end, an efficient search space is needed for exacting features effectively. Among the existing architectures, CNNs [26, 27] are well known to extract local features efficiently. Meanwhile, ViTs [11, 12, 13, 28, 29, 30] are capable of providing rich semantics with full-image receptive fields, but require high computational resources. To address this, we consider using CNN in the front layers of the network and ViT in the latter layers.  To explain, the task of semantic segmentation is usually accompanied by a large input. Therefore, we need to maintain an effective feature extraction, in which the CNN is adopted in the corresponding layers. 
-When the feature size is reduced by CNN, we employ ViT to obtain rich semantic information.
+This paper aims to develop a model that strikes a better balance between accuracy and efficiency in semantic segmentation. To achieve this goal, it's crucial to devise an efficient search space for precise feature extraction. Among existing architectures, CNNs [26, 27] are renowned for their ability to efficiently extract local features. Conversely, ViTs [11, 12, 13, 28, 29, 30] excel in providing rich semantics with expansive receptive fields but demand significant computational resources. To address this challenge, we propose a hybrid approach: employing CNNs in the initial layers of the network for effective feature extraction, and ViTs in subsequent layers for capturing detailed semantics.
 
-We followed NASViT to construct a CNN-ViT supernet in semantic segmentation. To maintain efficiency, we propose to use CNN solely for producing local feature pyramids efficiently in the backbone and leverage ViT for obtaining rich semantics and a large receptive field after the backbone, avoiding a search space increase and improving the overall architecture's efficiency.
+In semantic segmentation tasks, where inputs are often large, maintaining efficient feature extraction is essential. Thus, we incorporate CNNs in the early layers of the network to handle this task effectively. Once the feature size is reduced by CNN, ViTs are employed to capture rich semantic information.
 
-Therefore, we partition the large-scale search space into two parts (*i.e.* CNN \& ViT), which is elaborated in Table 1.  Following the design of BigNAS [24], we search the optimal channel width, block depth, expansion ratios and kernel size in CNN component. For the ViT component, we design the search space to include 5 variable factors: key dimension, value dimension, number of heads, MLP ratio, and block depth.
+Following the methodology of NASViT, we construct a CNN-ViT supernet for semantic segmentation. To ensure efficiency, we propose utilizing CNNs exclusively for generating local feature pyramids in the backbone, while leveraging ViTs for extracting rich semantics and expanding the receptive field beyond the backbone. This approach prevents an increase in the search space and enhances the overall architecture's efficiency.
+
+Consequently, we partition the extensive search space into two distinct components—CNN and ViT—as detailed in Table 1. Inspired by the framework of BigNAS [24], we explore optimal channel width, block depth, expansion ratios, and kernel size within the CNN component. For the ViT component, the search space encompasses five variable factors: key dimension, value dimension, number of heads, MLP ratio, and block depth.
 
 <p style="text-align: center;">
 <img width="500" src="./figure/table1.png"  alt="Table 1"/>
 </p>
-Table 1: The search space of Efficient-Topformer. Tuples of three values in parentheses represent the lowest value, the highest value, and steps. <span style="font-weight: bold;">Note:</span> Query dim = Key dim, Value dim = Attention ratio &times; Key dim .
+Table 1: The search space of Efficient-Topformer. Tuples of three values in parentheses represent the lowest value, the highest value, and steps. <span style="font-weight: bold;">Note:</span> Query dim = Key dim, Value dim = Attention ratio × Key dim .
 
 ### 3.2 Coordinate Descent Search
 
-In addition, we introduce a novel algorithm for searching in this heterogeneous supernet. As we know, NAS essentially involves a black-box optimization process based on a discrete space, with the architecture as the variable and accuracy on validation dataset as the objective. When the search space is divided, the optimization problem can be viewed as a multi-variate optimization problem, where the variables are the architectures of different parts. We formulate this optimization problem as follows:
+Furthermore, we present a novel algorithm tailored for searching within this heterogeneous supernet. As is well-known, NAS fundamentally entails a black-box optimization process within a discrete space, where the architecture serves as the variable and accuracy on the validation dataset serves as the objective. With the division of the search space, the optimization problem can be conceptualized as a multivariate optimization problem, where the variables encompass the architectures of various components. We formulate this optimization problem as follows:
 
 <div style="text-align: center;">
 $$
@@ -104,18 +105,17 @@ $$
 $$
 </div>
 
-
 After obtaining the optimal ViT sub-network architecture in the previous step, we fixed the ViT part \\(\alpha^{k+1}\_{\text{B}}\\) and sample the CNN part \\(\alpha^{k+1}_{\text{A}}\\) for the optimal CNN architecture in supernet \\(\mathcal{N}\\), which can be represented as
 
-<div style="text-align: center;">
+This approach allows us to streamline the search process by focusing on a single component (either CNN or ViT) within the supernet in each iteration. The Coordinate Descent Search (CDS) method facilitates this by breaking down the large and heterogeneous search space into smaller and more homogeneous ones. By reducing the number of dimensions to search in each iteration, CDS promotes faster convergence and more accurate performance estimation compared to other search methods such as random search and evolutionary search.
+To ensure that sampled sub-networks perform well in performance estimation, despite not being directly sampled from the supernet, we fine-tune each sampled sub-network for a few iterations to restore accuracy before conducting any evaluations.
+Following this iterative search process, we derive the optimal sub-network within the specified resource constraints. Subsequently, we retrain the sub-network on ImageNet and fine-tune it on the specific semantic segmentation dataset. The overarching algorithm is summarized in Algorithm 1.`<div style="text-align: center;">`
+
 $$
 \alpha^{k+1 *}_{\text{A}}=\underset{\alpha_{\text{A}} \in \mathcal{A}_\text{CNN}}{\arg \max }  \operatorname{Acc}_{\text{val}}(\mathcal{N}(\alpha_{\text{A}},\alpha^{k+1}_{\text{B}})))
 $$
+
 </div>
-In this way, we only need to search for a single part (either CNN or ViT) in the supernet once in a single iteration. 
-Coordinate Descent Search (CDS) method is used to achieve this by breaking down the large and heterogeneous search space into smaller and more homogeneous ones. CDS reduces the number of dimensions to search in each iteration, resulting in faster convergence and more accurate performance estimation than other search methods such as random search and evolutionary search.
-% To avoid the sampled sub-network perform not well in performance estimation due to not being sampled in the supernet, we finetune the sampled sub-network a few iterations to recover the accuracy before every evaluation. 
-After such iterative search process, we obtain the entire optimal sub-network under resource constraints. Finally, we retrain the sub-network on ImageNet and fine-tune it on specific semantic segmentation dataset. The overall algorithm is summarized in Algorithm 1.
 
 <p style="text-align: center;">
 <img width="600" src="./figure/algorithm1.png"  alt="Algorithm 1"/>
@@ -123,24 +123,32 @@ After such iterative search process, we obtain the entire optimal sub-network un
 
 ## 4 Experiments
 
-In this section, we first describe the semantic segmentation datasets and implementation details of training and search process. Then, we present the performance of Efficient-Topformer evaluated on these datasets. Finally, we conduct ablation studies to analyze the effectiveness of our method. 
+In this section, we begin by providing a description of the semantic segmentation datasets used and delve into the implementation details pertaining to both the training and search processes. Subsequently, we showcase the performance of Efficient-Topformer as evaluated on these datasets. Finally, we undertake ablation studies to meticulously analyze the effectiveness of our proposed method.
 
 ### 4.1 Datasets
 
-We perform experiments on two datasets, ADE20K [36] and COCO-Stuff [37], using mean of class-wise intersection over union (mIoU) as the evaluation metric. All the models are converted to [TNN: A high-performance, lightweight neural network inference framework.](https://github.com/Tencent/TNN) for latency measurement on an ARM-based computing core. **ADE20K**: The ADE20K dataset contains 25K images, covering 150 categories. All images are split into 20K/2K/3K for training, validation, and testing. **COCO-Stuff**: The COCO-Stuff [37] dataset contains 10000 complex images selected from COCO, with 9K in the training set and 1K in the test set.
+We conduct experiments on two datasets: ADE20K [36] and COCO-Stuff [37], utilizing the mean of class-wise intersection over union (mIoU) as the evaluation metric. All models are converted to [TNN: A high-performance, lightweight neural network inference framework](https://github.com/Tencent/TNN) for latency measurement on an ARM-based computing core.
+
+ **ADE20K** : The ADE20K dataset comprises 25,000 images spanning 150 categories. The dataset is partitioned into training (20,000 images), validation (2,000 images), and testing (3,000 images) sets.
+
+ **COCO-Stuff** : The COCO-Stuff [37] dataset comprises 10,000 complex images extracted from COCO. The training set contains 9,000 images, while the test set contains 1,000 images.
 
 ### 4.2 Implementation Details
 
-Our implementation is based on MMSegmentation [38] and Pytorch. The supernet is pre-trained on ImageNet for 300 epochs following BigNAS [24], and fine-tuned on ADE20K for 160K iterations. During the search process, we use the FLOPs as the resource constraint. The search process involves 5 iterations, with 500 CNN and 500 ViT architectures sampled in each iteration. For each sampled sub-network, we calibrate the batch norm statistics before evaluation using 32 images from the ADE20K training set. The training and finetuning process of the two supernets cost about 15 days on 8 Nvidia V100 GPUs. The search process cost about 3 days on a single Nvidia V100 GPU, which is 300+ times less than some reinforcement learning and genetic search methods [39, 40].
+Our implementation is built upon MMSegmentation [38] and PyTorch. The supernet is initially pre-trained on ImageNet for 300 epochs, following the methodology of BigNAS [24], and subsequently fine-tuned on ADE20K for 160,000 iterations.
+
+During the search process, we utilize the FLOPs as the resource constraint. The search process comprises 5 iterations, with 500 CNN and 500 ViT architectures sampled in each iteration. For each sampled sub-network, we calibrate the batch norm statistics before evaluation using 32 images from the ADE20K training set.
+
+The training and fine-tuning processes of the two supernets collectively take approximately 15 days to complete, utilizing 8 Nvidia V100 GPUs. In contrast, the search process requires about 3 days on a single Nvidia V100 GPU, which is over 300 times less than the computational cost incurred by certain reinforcement learning and genetic search methods [39, 40].
 
 ### 4.3 Main Results
 
-We perform the proposed Efficient-Topformer and find multiple models with diverse FLOPs constraints. The models were retrained on ImageNet and fine-tuned on specific semantic segmentation datasets. The results on ADE20K validation set are reported in Table 2. 
+We execute the proposed Efficient-Topformer algorithm and identify multiple models tailored to different FLOPs constraints. Subsequently, these models are retrained on ImageNet and fine-tuned on specific semantic segmentation datasets. The outcomes on the ADE20K validation set are presented in Table 2.
 
 <p style="text-align: center;">
 <img width="650" src="./figure/table2.png"  alt="Table 2"/>
 </p>
-Table 2: Results on ADE20K <em>val</em> set. Latency and FLOPs calculation adopt images with 512 &times; 512 resolution as input. * indicates results are obtained with 448 &times; 448 resolution as input. Latency is measured based on a single Qualcomm Snapdragon 865 processor. The mIoU is reported with single-scale inference.
+Table 2: Results on ADE20K <em>val</em> set. Latency and FLOPs calculation adopt images with 512 × 512 resolution as input. * indicates results are obtained with 448 × 448 resolution as input. Latency is measured based on a single Qualcomm Snapdragon 865 processor. The mIoU is reported with single-scale inference.
 
 Latency is measured on a mobile device with a single Qualcomm Snapdragon 865 processor. Our Efficient-Topformer model family achieves higher accuracy than the other methods with similar or lower FLOPs, including DeepLabV3+ [33], HR-NAS [10], Segformer [16], and TopFormer [18]. In particular, our base model, Efficient-Topformer-B, achieves a mIoU of 40.5\\(\%\\) using 1.8G FLOPs, which is 2.7\\(\%\\) higher than TopFormer-B with similar FLOPs and latency. Our models outperform TopFormer by 2.8\\(\%\\) and 3.6\\(\%\\) with FLOPs of 1.2G and 1.6G, respectively. Moreover, Efficient-Topformer-T achieves real-time inference with a mIoU of 35.24\\(\%\\) when the input resolution is 448 \\(\times\\) 448, which is 2.7\\(\%\\) higher than TopFormer-T.
 
@@ -149,7 +157,7 @@ We further evaluate Efficient-Topformer on COCO-Stuff val set which is shown in 
 <p style="text-align: center;">
 <img width="400" src="./figure/table3.png"  alt="Table 3"/>
 </p>
-Table 3: Results on COCO-Stuff <em>val</em> set. FLOPs calculation adopt images with 512 &times; 512 resolution as input. The mIoU is reported with single-scale inference.
+Table 3: Results on COCO-Stuff <em>val</em> set. FLOPs calculation adopt images with 512 × 512 resolution as input. The mIoU is reported with single-scale inference.
 
 ### 4.4 Searched Network Architecture
 
@@ -169,7 +177,6 @@ We present some visualization comparisons between TopFormer-B and the proposed E
 <p style="text-align: center;">
 <img width="650" src="./figure/visualization.png"  alt="Figure 3"/>
 </p>
-
 
 Figure 3: The visualization comparisons of the TopFormer-B and the proposed Efficient-Topformer on ADE20K val set. We use Efficient-Topformer-B to conduct visualization.
 
