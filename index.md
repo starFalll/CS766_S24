@@ -186,7 +186,7 @@ In this work, we propose a novel architecture search method for effective semant
 
 [link to view presentation slide](https://github.com/starFalll/CS766_S24/blob/main/docs/presentation.pdf)
 
-## Demos
+## Code and Demos
 
 [https://github.com/wmkai/NAS](https://github.com/wmkai/NAS)
 
