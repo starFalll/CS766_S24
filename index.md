@@ -79,7 +79,7 @@ We followed NASViT to construct a CNN-ViT supernet in semantic segmentation. To 
 Therefore, we partition the large-scale search space into two parts (*i.e.* CNN \& ViT), which is elaborated in Table 1.  Following the design of BigNAS [24], we search the optimal channel width, block depth, expansion ratios and kernel size in CNN component. For the ViT component, we design the search space to include 5 variable factors: key dimension, value dimension, number of heads, MLP ratio, and block depth.
 
 <p style="text-align: center;">
-<img width="500" src="./figure/table1.jpg"  alt="Table 1"/>
+<img width="500" src="./figure/table1.png"  alt="Table 1"/>
 </p>
 Table 1: The search space of Efficient-Topformer. Tuples of three values in parentheses represent the lowest value, the highest value, and steps. <span style="font-weight: bold;">Note:</span> Query dim = Key dim, Value dim = Attention ratio &times; Key dim .
 
