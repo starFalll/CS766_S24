@@ -67,7 +67,7 @@ The overview of Efficient-Topformer is illustrated in Figure 1, which aims to fi
 <p style="text-align: center;">
 <img width="1000" src="./figure/pipeline.png"  alt="Figure 1"/>
 </p>
-Figure 1: Overview of the proposed Efficient-Topformer. <span style="font-weight: bold;">Left</span>: the search space. <span style="font-weight: bold;">Right</span>: the search pipeline. The search space consists of CNN part and ViT part. In addition, we propose Coordinate Descend Search method to iteratively search for the optimal architecture.</div>
+Figure 1: Overview of the proposed Efficient-Topformer. <span style="font-weight: bold;">Left</span>: the search space. <span style="font-weight: bold;">Right</span>: the search pipeline. The search space consists of CNN part and ViT part. In addition, we propose Coordinate Descend Search method to iteratively search for the optimal architecture.
 
 ### 3.1 Search Space Design
 
@@ -81,7 +81,7 @@ Therefore, we partition the large-scale search space into two parts (*i.e.* CNN 
 <p style="text-align: center;">
 <img width="500" src="./figure/table1.jpg"  alt="Table 1"/>
 </p>
-Table 1: The search space of Efficient-Topformer. Tuples of three values in parentheses represent the lowest value, the highest value, and steps. <span style="font-weight: bold;">Note:</span> Query dim = Key dim, Value dim = Attention ratio &times; Key dim .</div>
+Table 1: The search space of Efficient-Topformer. Tuples of three values in parentheses represent the lowest value, the highest value, and steps. <span style="font-weight: bold;">Note:</span> Query dim = Key dim, Value dim = Attention ratio &times; Key dim .
 
 ### 3.2 Coordinate Descent Search
 
@@ -140,7 +140,7 @@ We perform the proposed Efficient-Topformer and find multiple models with divers
 <p style="text-align: center;">
 <img width="650" src="./figure/table2.png"  alt="Table 2"/>
 </p>
-Table 2: Results on ADE20K <em>val</em> set. Latency and FLOPs calculation adopt images with 512 &times; 512 resolution as input. * indicates results are obtained with 448 &times; 448 resolution as input. Latency is measured based on a single Qualcomm Snapdragon 865 processor. The mIoU is reported with single-scale inference.</div>
+Table 2: Results on ADE20K <em>val</em> set. Latency and FLOPs calculation adopt images with 512 &times; 512 resolution as input. * indicates results are obtained with 448 &times; 448 resolution as input. Latency is measured based on a single Qualcomm Snapdragon 865 processor. The mIoU is reported with single-scale inference.
 
 Latency is measured on a mobile device with a single Qualcomm Snapdragon 865 processor. Our Efficient-Topformer model family achieves higher accuracy than the other methods with similar or lower FLOPs, including DeepLabV3+ [33], HR-NAS [10], Segformer [16], and TopFormer [18]. In particular, our base model, Efficient-Topformer-B, achieves a mIoU of 40.5\\(\%\\) using 1.8G FLOPs, which is 2.7\\(\%\\) higher than TopFormer-B with similar FLOPs and latency. Our models outperform TopFormer by 2.8\\(\%\\) and 3.6\\(\%\\) with FLOPs of 1.2G and 1.6G, respectively. Moreover, Efficient-Topformer-T achieves real-time inference with a mIoU of 35.24\\(\%\\) when the input resolution is 448 \\(\times\\) 448, which is 2.7\\(\%\\) higher than TopFormer-T.
 
@@ -149,7 +149,7 @@ We further evaluate Efficient-Topformer on COCO-Stuff val set which is shown in 
 <p style="text-align: center;">
 <img width="400" src="./figure/table3.png"  alt="Table 3"/>
 </p>
-Table 3: Results on COCO-Stuff <em>val</em> set. FLOPs calculation adopt images with 512 &times; 512 resolution as input. The mIoU is reported with single-scale inference.</div>
+Table 3: Results on COCO-Stuff <em>val</em> set. FLOPs calculation adopt images with 512 &times; 512 resolution as input. The mIoU is reported with single-scale inference.
 
 ### 4.4 Searched Network Architecture
 
@@ -158,7 +158,7 @@ We show the architecture visualization of the searched models Efficient-Topforme
 <p style="text-align: center;">
 <img width="650" src="./figure/subnet.png"  alt="Figure 2"/>
 </p>
-Figure 2: Architecture visualization of the models Efficient-Topformer-B, Efficient-Topformer-S, Efficient-Topformer-T.</div>
+Figure 2: Architecture visualization of the models Efficient-Topformer-B, Efficient-Topformer-S, Efficient-Topformer-T.
 
 The architecture of Efficient-Topformer base model is a combination of a small CNN and a large ViT, with a total of 1.8G FLOPs. The CNN architecture has many channels and a large kernel size to facilitate rich feature learning, while maintaining a small depth and expand ratio for improved efficiency. The ViT component employs a large number of heads, QKV dimension, and depth to capture the full-image receptive field and model global interactions. This hybrid architecture balances accuracy and efficiency by leveraging the strengths of both CNN and ViT. The details of the architectures are provided in the supplementary materials.
 
@@ -171,7 +171,7 @@ We present some visualization comparisons between TopFormer-B and the proposed E
 </p>
 
 
-Figure 3: The visualization comparisons of the TopFormer-B and the proposed Efficient-Topformer on ADE20K val set. We use Efficient-Topformer-B to conduct visualization.</div>
+Figure 3: The visualization comparisons of the TopFormer-B and the proposed Efficient-Topformer on ADE20K val set. We use Efficient-Topformer-B to conduct visualization.
 
 ## 6 Conclusion
 
